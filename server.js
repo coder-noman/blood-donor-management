@@ -17,7 +17,6 @@ app.use(session({
     cookie: { maxAge: 1000 * 60 * 60 * 2 } // 2 hours
 }));
 
-// ---------- Helper middleware ----------
 function requireLogin(req, res, next) {
     if (!req.session.user) {
         return res.status(401).json({ error: 'Please log in first' });
@@ -31,10 +30,6 @@ function requireAdmin(req, res, next) {
     }
     next();
 }
-
-// =====================================================
-// AUTH ROUTES
-// =====================================================
 
 // Register a new account
 app.post('/api/register', (req, res) => {
@@ -110,10 +105,6 @@ app.get('/api/me', requireLogin, (req, res) => {
     });
 });
 
-// =====================================================
-// NORMAL USER: view / update own profile
-// =====================================================
-
 app.put('/api/me', requireLogin, (req, res) => {
     const { name, age, blood_group, phone, address, last_donation_date } = req.body;
     const sql = `UPDATE users SET name=?, age=?, blood_group=?, phone=?, address=?, last_donation_date=?
@@ -126,10 +117,6 @@ app.put('/api/me', requireLogin, (req, res) => {
     });
 });
 
-// =====================================================
-// "NEED BLOOD" DIRECTORY: any logged-in user can VIEW/SEARCH
-// donors, but cannot edit them. Only admin can edit (below).
-// =====================================================
 
 app.get('/api/donors', requireLogin, (req, res) => {
     const { blood_group, name } = req.query;
@@ -154,10 +141,6 @@ app.get('/api/donors', requireLogin, (req, res) => {
         res.json(results);
     });
 });
-
-// =====================================================
-// ADMIN: manage all users
-// =====================================================
 
 // Get all users
 app.get('/api/admin/users', requireAdmin, (req, res) => {
