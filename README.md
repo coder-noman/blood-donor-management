@@ -5,8 +5,8 @@ A simple web-based platform for managing university blood donor information, bui
 ---
 ## Project Setup
 
-Step-1 - npm install
-step-2 - npm start
+- Step-1 - npm install
+- step-2 - npm start
 
 ## 📌 Project Information
 
