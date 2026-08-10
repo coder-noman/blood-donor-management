@@ -1,0 +1,159 @@
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background: #f4f4f4;
+    margin: 0;
+    padding: 20px;
+}
+
+.container {
+    max-width: 500px;
+    margin: 60px auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+.wide {
+    max-width: 950px;
+}
+
+h1, h2 {
+    text-align: center;
+    color: #b71c1c;
+}
+
+.form-row {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+input, select {
+    width: 100%;
+    padding: 9px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 12px;
+}
+
+label {
+    font-size: 13px;
+    color: #555;
+    margin-bottom: 3px;
+    display: block;
+}
+
+button {
+    padding: 10px 18px;
+    margin-top: 5px;
+    margin-right: 8px;
+    border: none;
+    border-radius: 4px;
+    background: #b71c1c;
+    color: white;
+    cursor: pointer;
+    font-size: 15px;
+    width: 100%;
+}
+
+button:hover {
+    background: #8e1515;
+}
+
+.btn-secondary {
+    background: #555;
+    width: auto;
+}
+
+.link-text {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.link-text a {
+    color: #b71c1c;
+    text-decoration: none;
+}
+
+.error-msg {
+    color: #b71c1c;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.success-msg {
+    color: #2e7d32;
+    font-size: 14px;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.topbar {
+    max-width: 950px;
+    margin: 0 auto 20px auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #b71c1c;
+    color: white;
+    padding: 12px 20px;
+    border-radius: 6px;
+}
+
+.topbar span {
+    font-weight: bold;
+}
+
+.topbar button {
+    width: auto;
+    background: #fff;
+    color: #b71c1c;
+    padding: 7px 14px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: white;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    font-size: 13px;
+}
+
+th {
+    background: #b71c1c;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+.action-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    margin: 2px;
+    width: auto;
+}
+
+.edit-btn { background: #1565c0; }
+.delete-btn { background: #444; }
+.admin-tag {
+    background: #ffb300;
+    color: #333;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 11px;
+}
