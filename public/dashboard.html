@@ -10,8 +10,8 @@
 <div class="topbar">
     <span id="welcomeMsg">Welcome</span>
     <div>
-        <a href="need-blood.html" style="color:white; margin-right:15px;">🩸 Need Blood</a>
-        <a href="admin.html" id="adminLink" style="display:none; color:white; margin-right:15px;">Admin Panel</a>
+        <a href="donors.html">Need Blood</a>
+        <a href="admin.html" id="adminLink" style="display:none;">Admin Panel</a>
         <button id="logoutBtn">Logout</button>
     </div>
 </div>
@@ -52,6 +52,28 @@
         <input type="date" id="last_donation_date">
 
         <button type="submit">Update My Details</button>
+    </form>
+</div>
+
+<div class="container">
+    <h2>Donation Availability</h2>
+    <p id="availabilityStatus" style="text-align:center; color:#555;">Loading...</p>
+    <button id="toggleAvailabilityBtn">Mark as Available</button>
+</div>
+
+<div class="container">
+    <h2>Change Password</h2>
+
+    <div id="pwMsg"></div>
+
+    <form id="passwordForm">
+        <label>Current Password</label>
+        <input type="password" id="current_password" required>
+
+        <label>New Password</label>
+        <input type="password" id="new_password" required>
+
+        <button type="submit">Change Password</button>
     </form>
 </div>
 

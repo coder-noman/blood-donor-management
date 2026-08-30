@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Need Blood - Blood Donation Management System</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="topbar">
+    <span id="welcomeMsg">Need Blood</span>
+    <div>
+        <a href="dashboard.html">My Dashboard</a>
+        <a href="admin.html" id="adminLink" style="display:none;">Admin Panel</a>
+        <button id="logoutBtn">Logout</button>
+    </div>
+</div>
+
+<div class="container wide">
+    <h2>All Donors</h2>
+    <p style="text-align:center; color:#555;">Search below to find a donor by blood group.</p>
+
+    <input type="text" id="searchBox" placeholder="Filter by blood group e.g. A+, O-, B+ ...">
+
+    <label style="display:flex; align-items:center; gap:8px; font-size:14px; color:#333;">
+        <input type="checkbox" id="availableOnlyBox" style="width:auto; margin:0;">
+        Show only donors available right now
+    </label>
+
+    <div id="msg"></div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Blood Group</th>
+                <th>Phone</th>
+                <th>Address</th>
+                <th>Last Donation Date</th>
+                <th>Available?</th>
+            </tr>
+        </thead>
+        <tbody id="donorsTableBody"></tbody>
+    </table>
+</div>
+
+<script src="js/donors.js"></script>
+</body>
+</html>

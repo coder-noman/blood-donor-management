@@ -17,6 +17,7 @@ app.use(session({
     cookie: { maxAge: 1000 * 60 * 60 * 2 } // 2 hours
 }));
 
+// ---------- Helper middleware ----------
 function requireLogin(req, res, next) {
     if (!req.session.user) {
         return res.status(401).json({ error: 'Please log in first' });
@@ -30,6 +31,10 @@ function requireAdmin(req, res, next) {
     }
     next();
 }
+
+// =====================================================
+// AUTH ROUTES
+// =====================================================
 
 // Register a new account
 app.post('/api/register', (req, res) => {
@@ -75,7 +80,6 @@ app.post('/api/login', (req, res) => {
             return res.status(400).json({ error: 'Invalid email or password' });
         }
 
-        // store minimal info in session
         req.session.user = {
             id: user.id,
             name: user.name,
@@ -96,7 +100,7 @@ app.post('/api/logout', (req, res) => {
 
 // Get current logged-in user (for dashboard to check session)
 app.get('/api/me', requireLogin, (req, res) => {
-    const sql = `SELECT id, name, email, age, blood_group, phone, address, last_donation_date, is_admin
+    const sql = `SELECT id, name, email, age, blood_group, phone, address, last_donation_date, is_admin, is_available
                  FROM users WHERE id = ?`;
     db.query(sql, [req.session.user.id], (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -104,6 +108,23 @@ app.get('/api/me', requireLogin, (req, res) => {
         res.json(results[0]);
     });
 });
+
+// =====================================================
+// FEATURE 1: NEED BLOOD - any logged-in user can view all donors
+// =====================================================
+
+app.get('/api/donors', requireLogin, (req, res) => {
+    const sql = `SELECT name, blood_group, phone, address, last_donation_date, is_available
+                 FROM users ORDER BY is_available DESC, name ASC`;
+    db.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
+    });
+});
+
+// =====================================================
+// NORMAL USER: view / update own profile
+// =====================================================
 
 app.put('/api/me', requireLogin, (req, res) => {
     const { name, age, blood_group, phone, address, last_donation_date } = req.body;
@@ -117,34 +138,59 @@ app.put('/api/me', requireLogin, (req, res) => {
     });
 });
 
+// =====================================================
+// FEATURE 4: MARK AVAILABLE TO DONATE
+// =====================================================
 
-app.get('/api/donors', requireLogin, (req, res) => {
-    const { blood_group, name } = req.query;
+app.put('/api/me/availability', requireLogin, (req, res) => {
+    const { is_available } = req.body;
+    const value = is_available ? 1 : 0;
 
-    let sql = `SELECT name, blood_group, last_donation_date, phone, address
-               FROM users WHERE 1=1`;
-    const params = [];
-
-    if (blood_group) {
-        sql += ' AND blood_group = ?';
-        params.push(blood_group);
-    }
-    if (name) {
-        sql += ' AND name LIKE ?';
-        params.push(`%${name}%`);
-    }
-
-    sql += ' ORDER BY name ASC';
-
-    db.query(sql, params, (err, results) => {
+    db.query('UPDATE users SET is_available=? WHERE id=?', [value, req.session.user.id], (err) => {
         if (err) return res.status(500).json({ error: err.message });
-        res.json(results);
+        res.json({ message: value ? 'You are now marked as available to donate' : 'You are now marked as unavailable', is_available: !!value });
     });
 });
 
+// =====================================================
+// FEATURE 2: CHANGE PASSWORD
+// =====================================================
+
+app.put('/api/me/password', requireLogin, (req, res) => {
+    const { current_password, new_password } = req.body;
+
+    if (!current_password || !new_password) {
+        return res.status(400).json({ error: 'Both current and new password are required' });
+    }
+    if (new_password.length < 4) {
+        return res.status(400).json({ error: 'New password must be at least 4 characters' });
+    }
+
+    const sql = 'SELECT password FROM users WHERE id = ?';
+    db.query(sql, [req.session.user.id], (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        if (results.length === 0) return res.status(404).json({ error: 'User not found' });
+
+        const match = bcrypt.compareSync(current_password, results[0].password);
+        if (!match) {
+            return res.status(400).json({ error: 'Current password is incorrect' });
+        }
+
+        const hashedNew = bcrypt.hashSync(new_password, 10);
+        db.query('UPDATE users SET password=? WHERE id=?', [hashedNew, req.session.user.id], (err2) => {
+            if (err2) return res.status(500).json({ error: err2.message });
+            res.json({ message: 'Password changed successfully' });
+        });
+    });
+});
+
+// =====================================================
+// ADMIN: manage all users
+// =====================================================
+
 // Get all users
 app.get('/api/admin/users', requireAdmin, (req, res) => {
-    const sql = `SELECT id, name, email, age, blood_group, phone, address, last_donation_date, is_admin
+    const sql = `SELECT id, name, email, age, blood_group, phone, address, last_donation_date, is_admin, is_available
                  FROM users ORDER BY id DESC`;
     db.query(sql, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
@@ -154,11 +200,11 @@ app.get('/api/admin/users', requireAdmin, (req, res) => {
 
 // Update any user's details
 app.put('/api/admin/users/:id', requireAdmin, (req, res) => {
-    const { name, age, blood_group, phone, address, last_donation_date } = req.body;
-    const sql = `UPDATE users SET name=?, age=?, blood_group=?, phone=?, address=?, last_donation_date=?
+    const { name, age, blood_group, phone, address, last_donation_date, is_available } = req.body;
+    const sql = `UPDATE users SET name=?, age=?, blood_group=?, phone=?, address=?, last_donation_date=?, is_available=?
                  WHERE id=?`;
     db.query(sql, [name, age || null, blood_group || null, phone || null, address || null,
-        last_donation_date || null, req.params.id], (err) => {
+        last_donation_date || null, is_available ? 1 : 0, req.params.id], (err) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ message: 'User updated successfully' });
     });
@@ -169,6 +215,22 @@ app.delete('/api/admin/users/:id', requireAdmin, (req, res) => {
     db.query('DELETE FROM users WHERE id=?', [req.params.id], (err) => {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ message: 'User deleted successfully' });
+    });
+});
+
+// =====================================================
+// FEATURE 3: BLOOD GROUP STATISTICS (admin only)
+// =====================================================
+
+app.get('/api/admin/stats', requireAdmin, (req, res) => {
+    const sql = `SELECT blood_group, COUNT(*) AS total
+                 FROM users
+                 WHERE blood_group IS NOT NULL AND blood_group <> ''
+                 GROUP BY blood_group
+                 ORDER BY total DESC`;
+    db.query(sql, (err, results) => {
+        if (err) return res.status(500).json({ error: err.message });
+        res.json(results);
     });
 });
 

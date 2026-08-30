@@ -20,6 +20,7 @@ body {
 
 .wide {
     max-width: 950px;
+    margin: 0 auto 20px auto;
 }
 
 h1, h2 {
@@ -105,10 +106,22 @@ button:hover {
     color: white;
     padding: 12px 20px;
     border-radius: 6px;
+    flex-wrap: wrap;
+    gap: 10px;
 }
 
 .topbar span {
     font-weight: bold;
+}
+
+.topbar a {
+    color: white;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.topbar a:hover {
+    text-decoration: underline;
 }
 
 .topbar button {
@@ -156,4 +169,48 @@ tr:nth-child(even) {
     padding: 2px 6px;
     border-radius: 4px;
     font-size: 11px;
+}
+
+.stats-wrap {
+    max-width: 950px;
+    margin: 0 auto 20px auto;
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.08);
+}
+
+.stats-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 12px;
+}
+
+.stat-card {
+    background: #fdecea;
+    border: 1px solid #f5c6c0;
+    border-radius: 6px;
+    padding: 12px 18px;
+    text-align: center;
+    min-width: 80px;
+}
+
+.stat-card .bg {
+    font-size: 20px;
+    font-weight: bold;
+    color: #b71c1c;
+}
+
+.stat-card .count {
+    font-size: 13px;
+    color: #555;
+}
+
+.section-divider {
+    max-width: 950px;
+    margin: 0 auto;
+    border: none;
+    border-top: 1px solid #ddd;
+    margin-bottom: 20px;
 }

@@ -10,9 +10,16 @@
 <div class="topbar">
     <span id="welcomeMsg">Admin Panel</span>
     <div>
-        <a href="need-blood.html" style="color:white; margin-right:15px;">🩸 Need Blood</a>
-        <a href="dashboard.html" style="color:white; margin-right:15px;">My Dashboard</a>
+        <a href="donors.html">Need Blood</a>
+        <a href="dashboard.html">My Dashboard</a>
         <button id="logoutBtn">Logout</button>
+    </div>
+</div>
+
+<div class="stats-wrap">
+    <h2 style="margin-top:0;">Blood Group Statistics</h2>
+    <div class="stats-grid" id="statsGrid">
+        <p>Loading stats...</p>
     </div>
 </div>
 
@@ -32,6 +39,7 @@
                 <th>Phone</th>
                 <th>Address</th>
                 <th>Last Donation</th>
+                <th>Available?</th>
                 <th>Role</th>
                 <th>Actions</th>
             </tr>
@@ -40,7 +48,7 @@
     </table>
 </div>
 
-<!-- Edit modal (simple inline form, no fancy popup library) -->
+<!-- Edit modal (simple inline form) -->
 <div class="container" id="editBox" style="display:none;">
     <h2>Edit User</h2>
     <form id="editForm">
@@ -74,6 +82,11 @@
 
         <label>Last Donation Date</label>
         <input type="date" id="editLastDonation">
+
+        <label style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="editAvailable" style="width:auto; margin:0;">
+            Available to donate
+        </label>
 
         <button type="submit">Save Changes</button>
         <button type="button" class="btn-secondary" id="cancelEditBtn">Cancel</button>

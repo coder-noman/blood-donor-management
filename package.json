@@ -1,7 +1,7 @@
 {
   "name": "blood-donation-project",
-  "version": "2.0.0",
-  "description": "Blood Donation Management System with user accounts and admin dashboard (DBMS course project)",
+  "version": "3.0.0",
+  "description": "Blood Donation Management System with accounts, dashboard, admin panel, need-blood search, change password, and blood group stats (DBMS course project)",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
