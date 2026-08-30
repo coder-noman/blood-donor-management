@@ -88,10 +88,9 @@ The donor list page shows the following information for each registered donor:
 | Layer | Technology |
 |---|---|
 | **Frontend** | HTML5, CSS3, JavaScript |
-| **Backend** | *(To be confirmed — e.g., PHP / Node.js)* |
+| **Backend** |Node.js|
 | **Database** | MySQL |
 
-> 💡 *Note: Pure HTML/CSS/JS runs in the browser and cannot connect directly to MySQL — a backend layer (such as PHP or Node.js) will be needed to handle database communication. This will be finalized before development begins.*
 
 ---
 
